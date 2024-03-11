@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi
 
-import com.google.inject.AbstractModule
+import scala.util.control.NonFatal
 
-import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
+import play.api.Logger
+import play.api.mvc.Result
+import play.api.mvc.Results._
 
-class Module extends AbstractModule {
+import uk.gov.hmrc.apiplatformenvironmentdataapi.models.ErrorResponse
 
-  override def configure(): Unit = {
+package object controllers {
 
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[ThirdPartyApplicationConnector.Config]).toProvider(classOf[ThirdPartyApplicationConnectorConfigProvider])
+  val logger = Logger("controllers")
 
+  def recovery: PartialFunction[Throwable, Result] = {
+    case NonFatal(e) =>
+      val message = s"An unexpected error occurred: ${e.getMessage}"
+      logger.error(message)
+      InternalServerError(ErrorResponse("INTERNAL_SERVER_ERROR", message).asJson)
   }
 }

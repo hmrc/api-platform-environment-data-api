@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi.utils
 
-import com.google.inject.AbstractModule
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 
-import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
+import uk.gov.hmrc.apiplatform.modules.common.utils
 
-class Module extends AbstractModule {
-
-  override def configure(): Unit = {
-
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[ThirdPartyApplicationConnector.Config]).toProvider(classOf[ThirdPartyApplicationConnectorConfigProvider])
-
-  }
-}
+abstract class AsyncHmrcSpec extends utils.HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}

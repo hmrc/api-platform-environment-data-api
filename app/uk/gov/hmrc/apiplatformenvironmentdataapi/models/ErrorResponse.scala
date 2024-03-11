@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi.models
 
-import com.google.inject.AbstractModule
+import play.api.libs.json.{Format, JsValue, Json}
 
-import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
+case class ErrorResponse(code: String, message: String) {
+  def asJson: JsValue = ErrorResponse.format.writes(this)
+}
 
-class Module extends AbstractModule {
-
-  override def configure(): Unit = {
-
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[ThirdPartyApplicationConnector.Config]).toProvider(classOf[ThirdPartyApplicationConnectorConfigProvider])
-
-  }
+object ErrorResponse {
+  implicit val format: Format[ErrorResponse] = Json.format[ErrorResponse]
 }

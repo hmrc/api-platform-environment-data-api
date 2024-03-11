@@ -1,3 +1,5 @@
 # microservice specific routes
 
 GET        /hello-world             uk.gov.hmrc.apiplatformenvironmentdataapi.controllers.MicroserviceHelloWorldController.hello()
+
+GET        /applications            uk.gov.hmrc.apiplatformenvironmentdataapi.controllers.ApplicationsController.getApplicationsByQueryParam()
