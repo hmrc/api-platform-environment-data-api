@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.controllers
+package uk.gov.hmrc.apiplatformenvironmentdataapi.stubs
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import com.github.tomakehurst.wiremock.client.WireMock._
 
-import play.api.http.Status
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 
-class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatformenvironmentdataapi.utils.WireMockExtensions
 
-  private val fakeRequest = FakeRequest("GET", "/")
-  private val controller  = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
+trait ApiDefinitionConnectorStub extends WireMockExtensions {
 
-  "GET /" should {
-    "return 200" in {
-      val result = controller.hello()(fakeRequest)
-      status(result) shouldBe Status.OK
+  object FetchApi {
+
+    def returns(definition: ApiDefinition): Any = {
+      stubFor(
+        get(urlPathEqualTo(s"/api-definition/${definition.serviceName}"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withJsonBody(definition)
+          )
+      )
     }
   }
+
 }

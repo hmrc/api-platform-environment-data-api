@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport wit
       // Authenticate.returns(token)
       GetApplicationByClientId.stubWithClientId(clientId)
 
-      val fakeRequest = FakeRequest("GET", s"/applications?clientId=$clientId")
+      val fakeRequest = FakeRequest("GET", s"/applications?clientId=$clientId").withHeaders("Authorization" -> token)
 
       val result = route(app, fakeRequest).get
 

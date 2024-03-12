@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.utils
+package uk.gov.hmrc.apiplatformenvironmentdataapi.config
 
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import javax.inject.{Inject, Provider, Singleton}
 
-import uk.gov.hmrc.apiplatform.modules.common.utils
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-abstract class AsyncHmrcSpec extends utils.HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
+import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ApiDefinitionConnector
+
+@Singleton
+class ApiDefinitionConnectorConfigProvider @Inject() (config: ServicesConfig) extends Provider[ApiDefinitionConnector.Config] {
+
+  override def get(): ApiDefinitionConnector.Config =
+    ApiDefinitionConnector.Config(serviceBaseUrl = config.baseUrl("api-definition"))
+}

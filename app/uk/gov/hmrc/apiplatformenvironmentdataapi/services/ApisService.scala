@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.utils
+package uk.gov.hmrc.apiplatformenvironmentdataapi.services
 
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import javax.inject.Inject
+import scala.concurrent.Future
 
-import uk.gov.hmrc.apiplatform.modules.common.utils
+import uk.gov.hmrc.http.HeaderCarrier
 
-abstract class AsyncHmrcSpec extends utils.HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ApiDefinitionConnector
+
+class ApisService @Inject() (apiDefinitionConnector: ApiDefinitionConnector) {
+
+  def fetchApi(serviceName: ServiceName)(implicit hc: HeaderCarrier): Future[Option[ApiDefinition]] = {
+    apiDefinitionConnector.fetchApi(serviceName)
+  }
+}

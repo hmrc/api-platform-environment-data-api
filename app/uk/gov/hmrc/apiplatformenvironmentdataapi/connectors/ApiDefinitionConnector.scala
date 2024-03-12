@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.services
+package uk.gov.hmrc.apiplatformenvironmentdataapi.connectors
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
-import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
-import uk.gov.hmrc.apiplatformenvironmentdataapi.models.Application
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 @Singleton
-class ApplicationsService @Inject() (thirdPartyApplicationConnector: ThirdPartyApplicationConnector)(implicit val ec: ExecutionContext) {
+class ApiDefinitionConnector @Inject() (http: HttpClient, config: ApiDefinitionConnector.Config)(implicit ec: ExecutionContext) {
 
-  def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[Application]] = {
-    thirdPartyApplicationConnector.getApplicationByClientId(clientId).map(_.map(Application.from))
+  def fetchApi(serviceName: ServiceName)(implicit hc: HeaderCarrier): Future[Option[ApiDefinition]] = {
+    http.GET[Option[ApiDefinition]](s"${config.serviceBaseUrl}/api-definition/$serviceName")
   }
+}
+
+object ApiDefinitionConnector {
+
+  case class Config(
+      serviceBaseUrl: String
+    )
 }
