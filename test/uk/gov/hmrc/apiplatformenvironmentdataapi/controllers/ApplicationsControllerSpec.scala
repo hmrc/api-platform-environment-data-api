@@ -48,7 +48,7 @@ class ApplicationsControllerSpec extends HmrcSpec with ApplicationTestData {
   "getApplicationByQueryParams" should {
     "return 200 and an Application body" in new Setup {
       // when(mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval)).thenReturn(Future.successful(Retrieval.Username("Bob")))
-      GetApplicationByClientId.returns(application)
+      GetApplicationByClientId.returns(applicationResponse)
 
       val result = underTest.getApplicationsByQueryParam()(fakeRequestWithClientId)
 

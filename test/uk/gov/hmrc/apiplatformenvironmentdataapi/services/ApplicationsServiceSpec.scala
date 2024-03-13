@@ -38,7 +38,7 @@ class ApplicationsServiceSpec extends AsyncHmrcSpec with ApplicationTestData {
 
       val result = await(underTest.getApplicationByClientId(clientId))
 
-      result shouldBe Some(application)
+      result shouldBe Some(applicationResponse)
       GetApplicationByClientId.verifyCalledWith(clientId)
     }
 

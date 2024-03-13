@@ -23,7 +23,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
-import uk.gov.hmrc.apiplatformenvironmentdataapi.models.{Applications, ErrorResponse}
+import uk.gov.hmrc.apiplatformenvironmentdataapi.models.{Application, Applications, ErrorResponse}
 import uk.gov.hmrc.apiplatformenvironmentdataapi.services.ApplicationsService
 
 @Singleton()
@@ -36,7 +36,7 @@ class ApplicationsController @Inject() (applicationsService: ApplicationsService
     request.queryString.toList.sortBy(_._1) match {
       case ("clientId", clientIds) :: _ =>
         applicationsService.getApplicationByClientId(ClientId(clientIds.head)).map {
-          case Some(application) => Ok(Applications(List(application)).asJson)
+          case Some(application) => Ok(Applications(List(Application.from(application))).asJson)
           case None              => NotFound(ErrorResponse("NOT_FOUND", "Application could not be found").asJson)
         } recover recovery
       case _                            => Future.successful(BadRequest(ErrorResponse("BAD_REQUEST", "Invalid or missing query parameters").asJson))
