@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi.models
 
-import javax.inject.{Inject, Singleton}
+import play.api.libs.json.{Format, JsValue, Json}
 
-import play.api.Configuration
+case class ErrorResponse(code: String, message: String) {
+  def asJson: JsValue = ErrorResponse.format.writes(this)
+}
 
-@Singleton
-class AppConfig @Inject() (config: Configuration) {
-
-  val appName: String = config.get[String]("appName")
+object ErrorResponse {
+  implicit val format: Format[ErrorResponse] = Json.format[ErrorResponse]
 }

@@ -1,0 +1,176 @@
+openapi: 3.0.3
+info:
+  title: API Platform Environment Data API
+  description: API to access API Platform application/API data for the host environment
+  version: '1.0'
+servers:
+  - url: /
+paths:
+  /applications:
+    get:
+      description: Get application by client ID
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/applications'
+        "404":
+          description: Application could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+              example:
+                code: NOT_FOUND
+                message: Application could not be found
+    parameters:
+    - name: clientId
+      description: A unique key to applications
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/clientId'
+  /apis:
+    get:
+      description: Get API by service name
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiData'
+        "404":
+          description: API could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+              example:
+                code: NOT_FOUND
+                message: API could not be found
+    parameters:
+      - name: serviceName
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/serviceName'
+
+components:
+  schemas:
+    apiContext:
+      type: string
+      example: test/api
+
+    apiData:
+      type: object
+      properties:
+        serviceName:
+          $ref: '#/components/schemas/serviceName'
+        context:
+          $ref: '#/components/schemas/apiContext'
+        name:
+          type: string
+          example: My API
+        description:
+          type: string
+          example: This is my API
+        versions:
+          $ref: '#/components/schemas/apiVersions'
+
+    apiVersions:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/apiVersion'
+      example:
+        '1.0':
+          versionNbr: '1.0'
+          status: ALPHA
+          endpoints:
+            - uriPattern: /user/{id}
+              method: GET
+
+    apiVersionNumber:
+      type: string
+      example: '1.0'
+
+    apiVersion:
+      type: object
+      properties:
+        versionNbr:
+          $ref: '#/components/schemas/apiVersionNumber'
+        status:
+          type: string
+          enum:
+            - ALPHA
+            - BETA
+            - STABLE
+            - DEPRECATED
+            - RETIRED
+        endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/endpoint'
+
+    applicationId:
+      type: string
+      description: UUID
+      example: 9dd2c894-6d93-11ee-b962-0242ac120002
+
+    applications:
+      type: array
+      items:
+        $ref: '#/components/schemas/application'
+    
+    application:
+      type: object
+      properties:
+        applicationId:
+          $ref: '#/components/schemas/applicationId'
+        name:
+          type: string
+          example: My application
+        environment:
+          $ref: '#/components/schemas/environment'
+          
+    endpoint:
+      type: object
+      properties:
+        uriPattern:
+          type: string
+          example: /user/{id}
+        method:
+          type: string
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - OPTIONS
+            - HEAD
+
+    environment:
+      type: string
+      enum:
+        - PRODUCTION
+        - SANDBOX
+
+    clientId:
+      type: string
+      description: UUID
+      example: 335b9152-6d94-11ee-b962-0242ac120002
+
+    serviceName:
+      type: string
+      example: test-api
+
+    errorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string

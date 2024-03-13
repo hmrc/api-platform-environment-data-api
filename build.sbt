@@ -25,10 +25,13 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
+    Test / unmanagedSourceDirectories += baseDirectory.value / "shared-test",
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT")
   )
   .settings(
     routesImport ++= Seq(
-      "uk.gov.hmrc.apiplatformenvironmentdataapi.controllers._"
+      "uk.gov.hmrc.apiplatformenvironmentdataapi.controllers._",
+      "uk.gov.hmrc.apiplatform.modules.apis.domain.models._"
     )
   )
 

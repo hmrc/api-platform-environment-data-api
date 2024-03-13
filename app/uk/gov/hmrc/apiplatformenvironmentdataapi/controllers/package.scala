@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi
 
-import javax.inject.{Inject, Singleton}
+import scala.util.control.NonFatal
 
-import play.api.Configuration
+import play.api.Logger
+import play.api.mvc.Result
+import play.api.mvc.Results._
 
-@Singleton
-class AppConfig @Inject() (config: Configuration) {
+import uk.gov.hmrc.apiplatformenvironmentdataapi.models.ErrorResponse
 
-  val appName: String = config.get[String]("appName")
+package object controllers {
+
+  val logger = Logger("controllers")
+
+  def recovery: PartialFunction[Throwable, Result] = {
+    case NonFatal(e) =>
+      val message = s"An unexpected error occurred: ${e.getMessage}"
+      logger.error(message)
+      InternalServerError(ErrorResponse("INTERNAL_SERVER_ERROR", message).asJson)
+  }
 }

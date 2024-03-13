@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.apiplatformenvironmentdataapi.config
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Provider, Singleton}
 
-import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
 
 @Singleton
-class AppConfig @Inject() (config: Configuration) {
+class ThirdPartyApplicationConnectorConfigProvider @Inject() (config: ServicesConfig) extends Provider[ThirdPartyApplicationConnector.Config] {
 
-  val appName: String = config.get[String]("appName")
+  override def get(): ThirdPartyApplicationConnector.Config =
+    ThirdPartyApplicationConnector.Config(serviceBaseUrl = config.baseUrl("third-party-application"))
 }

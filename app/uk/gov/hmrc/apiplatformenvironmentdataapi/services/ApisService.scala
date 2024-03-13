@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apiplatformenvironmentdataapi.config
+package uk.gov.hmrc.apiplatformenvironmentdataapi.services
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import scala.concurrent.Future
 
-import play.api.Configuration
+import uk.gov.hmrc.http.HeaderCarrier
 
-@Singleton
-class AppConfig @Inject() (config: Configuration) {
+import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
+import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ApiDefinitionConnector
 
-  val appName: String = config.get[String]("appName")
+class ApisService @Inject() (apiDefinitionConnector: ApiDefinitionConnector) {
+
+  def fetchApi(serviceName: ServiceName)(implicit hc: HeaderCarrier): Future[Option[ApiDefinition]] = {
+    apiDefinitionConnector.fetchApi(serviceName)
+  }
 }
