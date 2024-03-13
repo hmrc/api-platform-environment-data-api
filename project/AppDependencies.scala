@@ -14,7 +14,8 @@ object AppDependencies {
   val compile = Seq(
     "uk.gov.hmrc"    %% "bootstrap-backend-play-30"         % bootstrapVersion,
     "uk.gov.hmrc"    %% "api-platform-application-domain"   % appDomainVersion,
-    "uk.gov.hmrc"    %% "api-platform-api-domain"           % apiDomainVersion
+    "uk.gov.hmrc"    %% "api-platform-api-domain"           % apiDomainVersion,
+    "uk.gov.hmrc"    %% "internal-auth-client-play-30"      % "1.10.0"
   )
 
   val test = Seq(

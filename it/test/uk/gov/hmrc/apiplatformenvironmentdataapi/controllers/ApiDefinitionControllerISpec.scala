@@ -26,7 +26,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.test.WireMockSupport
 
 import uk.gov.hmrc.apiplatformenvironmentdataapi.models._
-import uk.gov.hmrc.apiplatformenvironmentdataapi.stubs.ApiDefinitionConnectorStub
+import uk.gov.hmrc.apiplatformenvironmentdataapi.stubs.{ApiDefinitionConnectorStub, InternalAuthStub}
 import uk.gov.hmrc.apiplatformenvironmentdataapi.utils.{ApiTestData, AsyncHmrcSpec}
 
 class ApiDefinitionControllerISpec extends AsyncHmrcSpec with WireMockSupport with GuiceOneAppPerSuite with ApiDefinitionConnectorStub {
@@ -42,7 +42,7 @@ class ApiDefinitionControllerISpec extends AsyncHmrcSpec with WireMockSupport wi
     .configure(stubConfig)
     .build()
 
-  trait Setup extends ApiTestData {
+  trait Setup extends ApiTestData with InternalAuthStub {
 
     val token     = "123456"
     val underTest = app.injector.instanceOf[ApiDefinitionController]
@@ -51,7 +51,7 @@ class ApiDefinitionControllerISpec extends AsyncHmrcSpec with WireMockSupport wi
   "fetch" should {
 
     "return 200 on the agreed route" in new Setup {
-      // Authenticate.returns(token)
+      Authenticate.returns(token)
       FetchApi.returns(anApiDefinition)
 
       val fakeRequest = FakeRequest("GET", s"/apis?serviceName=$aServiceName").withHeaders("Authorization" -> token)
@@ -62,7 +62,7 @@ class ApiDefinitionControllerISpec extends AsyncHmrcSpec with WireMockSupport wi
     }
 
     "return 400 if no serviceName" in new Setup {
-      // Authenticate.returns(token)
+      Authenticate.returns(token)
       FetchApi.returns(anApiDefinition)
 
       val fakeRequest = FakeRequest("GET", s"/apis").withHeaders("Authorization" -> token)

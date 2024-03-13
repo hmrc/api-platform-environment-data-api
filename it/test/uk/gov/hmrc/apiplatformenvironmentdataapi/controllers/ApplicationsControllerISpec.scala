@@ -26,7 +26,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.test.WireMockSupport
 
 import uk.gov.hmrc.apiplatformenvironmentdataapi.models.ErrorResponse
-import uk.gov.hmrc.apiplatformenvironmentdataapi.stubs.ThirdPartyApplicationConnectorStub
+import uk.gov.hmrc.apiplatformenvironmentdataapi.stubs.{InternalAuthStub, ThirdPartyApplicationConnectorStub}
 import uk.gov.hmrc.apiplatformenvironmentdataapi.utils.{ApplicationTestData, AsyncHmrcSpec}
 
 class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport with GuiceOneAppPerSuite {
@@ -42,7 +42,7 @@ class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport wit
     .configure(stubConfig)
     .build()
 
-  trait Setup extends ThirdPartyApplicationConnectorStub with ApplicationTestData {
+  trait Setup extends ThirdPartyApplicationConnectorStub with ApplicationTestData with InternalAuthStub {
 
     val token     = "123456"
     val underTest = app.injector.instanceOf[ApplicationsController]
@@ -51,7 +51,7 @@ class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport wit
   "getApplicationsByQueryParam" should {
 
     "return 200 on the agreed route" in new Setup {
-      // Authenticate.returns(token)
+      Authenticate.returns(token)
       GetApplicationByClientId.stubWithClientId(clientId)
 
       val fakeRequest = FakeRequest("GET", s"/applications?clientId=$clientId").withHeaders("Authorization" -> token)
@@ -63,7 +63,7 @@ class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport wit
     }
 
     "return 400 when there are no query parameters" in new Setup {
-      // Authenticate.returns(token)
+      Authenticate.returns(token)
 
       val fakeRequest = FakeRequest("GET", s"/applications").withHeaders("Authorization" -> token)
 
@@ -74,7 +74,7 @@ class ApplicationsControllerISpec extends AsyncHmrcSpec with WireMockSupport wit
     }
 
     "return 400 when the query parameters are not valid" in new Setup {
-      // Authenticate.returns(token)
+      Authenticate.returns(token)
 
       val fakeRequest = FakeRequest("GET", s"/applications?x=a&y=b").withHeaders("Authorization" -> token)
 
