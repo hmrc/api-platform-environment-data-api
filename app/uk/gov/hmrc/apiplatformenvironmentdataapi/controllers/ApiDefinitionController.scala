@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
@@ -27,16 +28,16 @@ import uk.gov.hmrc.apiplatformenvironmentdataapi.models.{ApiResponse, ErrorRespo
 import uk.gov.hmrc.apiplatformenvironmentdataapi.services.ApisService
 
 @Singleton()
-class ApiDefinitionController @Inject() (apisService: ApisService, cc: ControllerComponents)(implicit ec: ExecutionContext)
+class ApiDefinitionController @Inject() (apisService: ApisService, cc: ControllerComponents, auth: BackendAuthComponents)(implicit ec: ExecutionContext)
     extends BackendController(cc) {
   private lazy val notFound = NotFound(ErrorResponse("NOT_FOUND", "API could not be found").asJson)
 
-  def fetch(serviceName: ServiceName): Action[AnyContent] = Action.async { implicit request =>
-    // auth.authorizedAction(predicate = Predicate.Permission(Resource.from("api-platform-environment-data-api", "api-definitions/all"), IAAction("READ"))).async {
-    //   implicit request: AuthenticatedRequest[AnyContent, Unit] =>
-    apisService.fetchApi(serviceName) map {
-      case Some(apiDef) => Ok(ApiResponse.from(apiDef).asJson)
-      case _            => notFound
-    } recover recovery
-  }
+  def fetch(serviceName: ServiceName): Action[AnyContent] =
+    auth.authorizedAction(predicate = Predicate.Permission(Resource.from("api-platform-environment-data-api", "api-definitions/all"), IAAction("READ"))).async {
+      implicit request: AuthenticatedRequest[AnyContent, Unit] =>
+        apisService.fetchApi(serviceName) map {
+          case Some(apiDef) => Ok(ApiResponse.from(apiDef).asJson)
+          case _            => notFound
+        } recover recovery
+    }
 }

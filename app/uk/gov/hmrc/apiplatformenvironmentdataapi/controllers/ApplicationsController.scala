@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
@@ -27,20 +28,19 @@ import uk.gov.hmrc.apiplatformenvironmentdataapi.models.{Application, Applicatio
 import uk.gov.hmrc.apiplatformenvironmentdataapi.services.ApplicationsService
 
 @Singleton()
-class ApplicationsController @Inject() (applicationsService: ApplicationsService, cc: ControllerComponents)(implicit ec: ExecutionContext)
+class ApplicationsController @Inject() (applicationsService: ApplicationsService, cc: ControllerComponents, auth: BackendAuthComponents)(implicit ec: ExecutionContext)
     extends BackendController(cc) {
 
-  def getApplicationsByQueryParam(): Action[AnyContent] = Action.async { implicit request =>
-//    auth.authorizedAction(predicate = Predicate.Permission(Resource.from("api-platform-environment-data-api", "applications/all"), IAAction("READ"))).async {
-//      implicit request: AuthenticatedRequest[AnyContent, Unit] =>
-    request.queryString.toList.sortBy(_._1) match {
-      case ("clientId", clientIds) :: _ =>
-        applicationsService.getApplicationByClientId(ClientId(clientIds.head)).map {
-          case Some(application) => Ok(Applications(List(Application.from(application))).asJson)
-          case None              => NotFound(ErrorResponse("NOT_FOUND", "Application could not be found").asJson)
-        } recover recovery
-      case _                            => Future.successful(BadRequest(ErrorResponse("BAD_REQUEST", "Invalid or missing query parameters").asJson))
+  def getApplicationsByQueryParam(): Action[AnyContent] =
+    auth.authorizedAction(predicate = Predicate.Permission(Resource.from("api-platform-environment-data-api", "applications/all"), IAAction("READ"))).async {
+      implicit request: AuthenticatedRequest[AnyContent, Unit] =>
+        request.queryString.toList.sortBy(_._1) match {
+          case ("clientId", clientIds) :: _ =>
+            applicationsService.getApplicationByClientId(ClientId(clientIds.head)).map {
+              case Some(application) => Ok(Applications(List(Application.from(application))).asJson)
+              case None              => NotFound(ErrorResponse("NOT_FOUND", "Application could not be found").asJson)
+            } recover recovery
+          case _                            => Future.successful(BadRequest(ErrorResponse("BAD_REQUEST", "Invalid or missing query parameters").asJson))
+        }
     }
-//    }
-  }
 }
