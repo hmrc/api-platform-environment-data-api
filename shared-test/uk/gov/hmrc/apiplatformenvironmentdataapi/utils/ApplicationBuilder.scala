@@ -35,7 +35,7 @@ trait ApplicationBuilder {
       collaborators = Set.empty,
       createdOn = Instant.now,
       lastAccess = None,
-      grantLength = 30,
+      grantLength = GrantLength.ONE_MONTH,
       lastAccessTokenUsage = None,
       termsAndConditionsUrl = None,
       privacyPolicyUrl = None,
