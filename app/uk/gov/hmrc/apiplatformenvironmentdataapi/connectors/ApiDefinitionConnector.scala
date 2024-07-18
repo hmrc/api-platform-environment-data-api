@@ -20,15 +20,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import uk.gov.hmrc.apiplatform.modules.apis.domain.models._
 
 @Singleton
-class ApiDefinitionConnector @Inject() (http: HttpClient, config: ApiDefinitionConnector.Config)(implicit ec: ExecutionContext) {
+class ApiDefinitionConnector @Inject() (http: HttpClientV2, config: ApiDefinitionConnector.Config)(implicit ec: ExecutionContext) {
 
   def fetchApi(serviceName: ServiceName)(implicit hc: HeaderCarrier): Future[Option[ApiDefinition]] = {
-    http.GET[Option[ApiDefinition]](s"${config.serviceBaseUrl}/api-definition/$serviceName")
+    http.get(url"${config.serviceBaseUrl}/api-definition/$serviceName").execute[Option[ApiDefinition]]
   }
 }
 
