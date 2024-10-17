@@ -20,7 +20,7 @@ import scala.concurrent.Future
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationResponse
+import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationWithCollaborators
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
 import uk.gov.hmrc.apiplatformenvironmentdataapi.services.ApplicationsService
 
@@ -30,7 +30,7 @@ trait ApplicationsServiceMockModule extends MockitoSugar with ArgumentMatchersSu
 
   object GetApplicationByClientId {
 
-    def returns(application: ApplicationResponse) =
+    def returns(application: ApplicationWithCollaborators) =
       when(mockApplicationsService.getApplicationByClientId(*[ClientId])(*)).thenReturn(Future.successful(Some(application)))
 
     def returnsNotFound() =

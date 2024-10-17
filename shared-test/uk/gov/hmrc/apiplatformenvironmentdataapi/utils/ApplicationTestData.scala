@@ -16,21 +16,14 @@
 
 package uk.gov.hmrc.apiplatformenvironmentdataapi.utils
 
-import uk.gov.hmrc.apiplatform.modules.common.domain.models._
+import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationWithCollaboratorsFixtures
 import uk.gov.hmrc.apiplatformenvironmentdataapi.models._
 
-trait ApplicationTestData extends ApplicationBuilder {
-  val applicationId       = ApplicationId.random
-  val clientId            = ClientId.random
-  val appName             = "Application Name"
-  val environment         = Environment.PRODUCTION
-  val applicationResponse = buildApplication(applicationId, clientId, appName, environment)
+trait ApplicationTestData extends ApplicationWithCollaboratorsFixtures {
+  val applicationId = standardApp.id
+  val clientId      = standardApp.clientId
 
-  val application = Application(
-    applicationId,
-    appName,
-    environment
-  )
+  val application = Application.from(standardApp)
 
   val applications = Applications(List(application))
 }
