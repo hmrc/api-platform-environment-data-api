@@ -23,15 +23,15 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
-import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationResponse
+import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationWithCollaborators
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
 
 @Singleton
 class ThirdPartyApplicationConnector @Inject() (http: HttpClientV2, config: ThirdPartyApplicationConnector.Config)(implicit ec: ExecutionContext) {
 
-  def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[ApplicationResponse]] = {
+  def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[ApplicationWithCollaborators]] = {
     http.get(url"${config.serviceBaseUrl}/application?clientId=${clientId.value}")
-      .execute[Option[ApplicationResponse]]
+      .execute[Option[ApplicationWithCollaborators]]
   }
 }
 

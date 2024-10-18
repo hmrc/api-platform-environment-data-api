@@ -21,14 +21,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.http.HeaderCarrier
 
-import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationResponse
+import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationWithCollaborators
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
 import uk.gov.hmrc.apiplatformenvironmentdataapi.connectors.ThirdPartyApplicationConnector
 
 @Singleton
 class ApplicationsService @Inject() (thirdPartyApplicationConnector: ThirdPartyApplicationConnector)(implicit val ec: ExecutionContext) {
 
-  def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[ApplicationResponse]] = {
+  def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[ApplicationWithCollaborators]] = {
     thirdPartyApplicationConnector.getApplicationByClientId(clientId)
   }
 }
