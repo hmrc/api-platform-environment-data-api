@@ -68,7 +68,8 @@ trait ThirdPartyApplicationConnectorStub extends WireMockExtensions {
        |    "allowlist": []
        |  },
        |  "moreApplication": {
-       |    "allowAutoDelete": false
+       |    "allowAutoDelete": false,
+       |    "lastActionActor": "UNKNOWN"
        |  }
        |}""".stripMargin
 }
