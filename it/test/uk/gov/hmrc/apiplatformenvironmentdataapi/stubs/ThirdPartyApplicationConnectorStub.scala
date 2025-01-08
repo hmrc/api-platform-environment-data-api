@@ -19,8 +19,10 @@ package uk.gov.hmrc.apiplatformenvironmentdataapi.stubs
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 
+import uk.gov.hmrc.apiplatform.modules.applications.core.domain.models.ApplicationWithCollaboratorsData
 import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
 import uk.gov.hmrc.apiplatformenvironmentdataapi.utils.WireMockExtensions
 
@@ -40,36 +42,6 @@ trait ThirdPartyApplicationConnectorStub extends WireMockExtensions {
       )
   }
 
-  private val applicationResponseBody =
-    s"""{
-       |  "id": "967226ae-46ca-4b71-a76c-72efbc402a9b",
-       |  "clientId": "tl68AJH3PA8kKe7H9gxIatou2UTK",
-       |  "gatewayId": "gateway-id",
-       |  "name": "Application Name",
-       |  "deployedTo": "PRODUCTION",
-       |  "collaborators": [],
-       |  "createdOn": "2023-11-22T14:56:57.833Z",
-       |  "grantLength": 30,
-       |  "redirectUris": [],
-       |  "access": {
-       |    "redirectUris": [],
-       |    "overrides": [],
-       |    "accessType": "STANDARD"
-       |  },
-       |  "state": {
-       |    "name": "TESTING",
-       |    "updatedOn": "2023-11-22T14:56:57.833Z"
-       |  },
-       |  "rateLimitTier": "BRONZE",
-       |  "blocked": false,
-       |  "trusted": false,
-       |  "ipAllowlist": {
-       |    "required": false,
-       |    "allowlist": []
-       |  },
-       |  "moreApplication": {
-       |    "allowAutoDelete": false,
-       |    "lastActionActor": "UNKNOWN"
-       |  }
-       |}""".stripMargin
+  private val applicationResponseBody = Json.toJson(ApplicationWithCollaboratorsData.standardApp).toString()
+
 }
