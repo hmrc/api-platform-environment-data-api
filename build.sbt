@@ -26,7 +26,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
     Test / unmanagedSourceDirectories += baseDirectory.value / "shared-test",
-    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT")
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
+    Test / javaOptions += s"-javaagent:${csrCacheDirectory.value.getAbsolutePath}/https/repo1.maven.org/maven2/org/mockito/mockito-core/${AppDependencies.mockitoVersion}/mockito-core-${AppDependencies.mockitoVersion}.jar"
   )
   .settings(
     routesImport ++= Seq(
@@ -34,7 +35,6 @@ lazy val microservice = Project(appName, file("."))
       "uk.gov.hmrc.apiplatform.modules.apis.domain.models._"
     )
   )
-
 
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
