@@ -26,7 +26,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
     Test / unmanagedSourceDirectories += baseDirectory.value / "shared-test",
-    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT")
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
   )
   .settings(
     routesImport ++= Seq(
@@ -34,7 +34,6 @@ lazy val microservice = Project(appName, file("."))
       "uk.gov.hmrc.apiplatform.modules.apis.domain.models._"
     )
   )
-
 
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
