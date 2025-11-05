@@ -30,7 +30,7 @@ import uk.gov.hmrc.apiplatform.modules.common.domain.models.ClientId
 class ThirdPartyApplicationConnector @Inject() (http: HttpClientV2, config: ThirdPartyApplicationConnector.Config)(implicit ec: ExecutionContext) {
 
   def getApplicationByClientId(clientId: ClientId)(implicit hc: HeaderCarrier): Future[Option[ApplicationWithCollaborators]] = {
-    http.get(url"${config.serviceBaseUrl}/application?clientId=${clientId.value}")
+    http.get(url"${config.serviceBaseUrl}/query?clientId=${clientId}")
       .execute[Option[ApplicationWithCollaborators]]
   }
 }
