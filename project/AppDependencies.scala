@@ -7,8 +7,8 @@ import sbt.*
 object AppDependencies {
 
   private val bootstrapVersion = "9.19.0"
-  private val apiDomainVersion = "0.19.1"
-  private val appDomainVersion = "0.87.0"
+  private val apiDomainVersion = "0.20.0"
+  private val appDomainVersion = "0.90.0"
   private val mockitoScalaVersion = "2.0.0"
   
   val compile = Seq(

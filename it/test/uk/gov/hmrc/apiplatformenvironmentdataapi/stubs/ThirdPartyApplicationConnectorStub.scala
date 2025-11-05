@@ -32,7 +32,7 @@ trait ThirdPartyApplicationConnectorStub extends WireMockExtensions {
 
     def stubWithClientId(clientId: ClientId): StubMapping =
       stubFor(
-        get(urlPathEqualTo(s"/query"))
+        get(urlPathEqualTo("/query"))
           .withQueryParam("clientId", equalTo(clientId.value))
           .willReturn(
             aResponse()
