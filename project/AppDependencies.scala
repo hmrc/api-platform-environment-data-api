@@ -6,16 +6,16 @@ import sbt.*
 
 object AppDependencies {
 
-  private val bootstrapVersion = "9.19.0"
-  private val apiDomainVersion = "0.20.0"
-  private val appDomainVersion = "0.90.0"
+  private val bootstrapVersion = "10.7.0"
+  private val apiDomainVersion = "1.0.0"
+  private val appDomainVersion = "1.0.0"
   private val mockitoScalaVersion = "2.0.0"
-  
+
   val compile = Seq(
     "uk.gov.hmrc"    %% "bootstrap-backend-play-30"         % bootstrapVersion,
     "uk.gov.hmrc"    %% "api-platform-application-domain"   % appDomainVersion,
     "uk.gov.hmrc"    %% "api-platform-api-domain"           % apiDomainVersion,
-    "uk.gov.hmrc"    %% "internal-auth-client-play-30"      % "3.1.0"
+    "uk.gov.hmrc"    %% "internal-auth-client-play-30"      % "4.3.0"
   )
 
   val test = Seq(
