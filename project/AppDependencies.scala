@@ -10,7 +10,6 @@ object AppDependencies {
   private val commonDomainVersion = "1.4.0"
   private val apiDomainVersion    = "1.8.0"
   private val appDomainVersion    = "1.6.0"
-  private val mockitoScalaVersion = "2.0.0"
 
   val compile = Seq(
     "uk.gov.hmrc"    %% "bootstrap-backend-play-30"         % bootstrapVersion,
@@ -22,7 +21,6 @@ object AppDependencies {
 
   val test = Seq(
     "uk.gov.hmrc"    %% "bootstrap-test-play-30"                     % bootstrapVersion,
-    "org.mockito"    %% "mockito-scala-scalatest"                    % mockitoScalaVersion,
     "uk.gov.hmrc"    %% "api-platform-common-domain-fixtures"        % commonDomainVersion,
     "uk.gov.hmrc"    %% "api-platform-application-domain-fixtures"   % appDomainVersion
 
